@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from lib import constants as const
 from apps.product.models import Product
+from apps.product.serializers.categoryserializer import CategorySerializer
 
 class ProductListSerializer(serializers.ModelSerializer):
 	id = serializers.UUIDField(source=const.PRODUCT_ID_PROPERTY)
@@ -13,8 +14,9 @@ class ProductListSerializer(serializers.ModelSerializer):
 			const.DESCRIPTION_PROPERTY
 		]
 
-class ProductDetailSerializer(serializers.ModelSerializer):
+class ProductDetailSerializer(ProductListSerializer):
+	category = CategorySerializer(read_only=True)
+
 	class Meta:
 		model = Product
-		fields = const.ALL_FIELDS_PROPERTY
-		depth = 1
+		exclude = [const.PRODUCT_ID_PROPERTY]
