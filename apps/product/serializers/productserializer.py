@@ -3,9 +3,15 @@ from lib import constants as const
 from apps.product.models import Product
 
 class ProductListSerializer(serializers.ModelSerializer):
+	id = serializers.UUIDField(source=const.PRODUCT_ID_PROPERTY)
+
 	class Meta:
 		model = Product
-		exclude = [const.CATEGORY_PROPERTY, const.DESCRIPTION_PROPERTY]
+		exclude = [
+			const.PRODUCT_ID_PROPERTY,
+			const.CATEGORY_PROPERTY,
+			const.DESCRIPTION_PROPERTY
+		]
 
 class ProductDetailSerializer(serializers.ModelSerializer):
 	class Meta:
