@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from lib import constants as const
 from lib import commonutility as commonUtil
-from lib import errormessages as errorMessages
+from lib import errorutility as errorUtil
 from apps.product.models import Product
 from apps.product.serializers.productserializer import ProductListSerializer, \
 	ProductDetailSerializer
@@ -15,10 +15,7 @@ class ProductListView(ListAPIView):
 		try:
 			return self.list(request, *args, **kwargs)
 		except:
-			return Response(
-				{const.ERROR_PROPERTY: errorMessages.INTERNAL_SERVER_ERROR},
-				status.HTTP_500_INTERNAL_SERVER_ERROR
-			)
+			return errorUtil.getInternalServerErrorResponse()
 
 	def get_queryset(self):
 		categoryId = \
@@ -56,10 +53,7 @@ class ProductDetailView(RetrieveAPIView):
 		try:
 			return self.retrieve(request, *args, **kwargs)
 		except:
-			return Response(
-				{const.ERROR_PROPERTY: errorMessages.INTERNAL_SERVER_ERROR},
-				status.HTTP_500_INTERNAL_SERVER_ERROR
-			)
+			return errorUtil.getInternalServerErrorResponse()
 
 	def get_queryset(self):
 		return Product.objects.filter(pk=self.kwargs[const.PK_PROPERTY])
