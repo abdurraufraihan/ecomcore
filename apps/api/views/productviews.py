@@ -1,7 +1,9 @@
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
+from rest_framework import status
 from lib import constants as const
 from lib import commonutility as commonUtil
+from lib import errormessages as errorMessages
 from apps.product.models import Product
 from apps.product.serializers.productserializer import ProductSerializer
 
@@ -9,7 +11,13 @@ class ProductListView(ListAPIView):
 	serializer_class = ProductSerializer
 
 	def get(self, request, *args, **kwargs):
-		return self.list(request, *args, **kwargs)
+		try:
+			return self.list(request, *args, **kwargs)
+		except:
+			return Response(
+				{const.ERROR_PROPERTY: errorMessages.INTERNAL_SERVER_ERROR},
+				status.HTTP_500_INTERNAL_SERVER_ERROR
+			)
 
 	def get_queryset(self):
 		categoryId = \
