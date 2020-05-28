@@ -5,11 +5,11 @@ from lib import constants as const
 from lib import commonutility as commonUtil
 from lib import errormessages as errorMessages
 from apps.product.models import Product
-from apps.product.serializers.productserializer import ProductSerializer, \
+from apps.product.serializers.productserializer import ProductListSerializer, \
 	ProductDetailSerializer
 
 class ProductListView(ListAPIView):
-	serializer_class = ProductSerializer
+	serializer_class = ProductListSerializer
 
 	def get(self, request, *args, **kwargs):
 		try:
