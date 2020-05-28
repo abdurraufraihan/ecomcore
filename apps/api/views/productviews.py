@@ -1,4 +1,5 @@
 from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
 from lib import constants as const
 from lib import commonutility as commonUtil
 from apps.product.models import Product
@@ -6,6 +7,9 @@ from apps.product.serializers.productserializer import ProductSerializer
 
 class ProductListView(ListAPIView):
 	serializer_class = ProductSerializer
+
+	def get(self, request, *args, **kwargs):
+		return self.list(request, *args, **kwargs)
 
 	def get_queryset(self):
 		categoryId = \
@@ -21,3 +25,17 @@ class ProductListView(ListAPIView):
 			productFilter[const.TITLE_CONTAINS_FILTER_PROPERTY] = search
 		queryset = Product.objects.filter(**productFilter)[startItem : endItem]
 		return queryset
+
+	def list(self, request, *args, **kwargs):
+		queryset = self.filter_queryset(self.get_queryset())
+		page = self.paginate_queryset(queryset)
+		if page is not None:
+			serializer = self.get_serializer(page, many=True)
+			return self.get_paginated_response(serializer.data)
+		serializer = self.get_serializer(queryset, many=True)
+		totalProduct = Product.objects.count()
+		finalResponse = {
+			const.TOTAL_PRODUCT_PROPERTY: totalProduct,
+			const.PRODUCTS_PROPERTY: serializer.data
+		}
+		return Response(finalResponse)
