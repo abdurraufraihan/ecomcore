@@ -48,6 +48,7 @@ class ProductListView(ListAPIView):
 
 class ProductDetailView(RetrieveAPIView):
 	serializer_class = ProductDetailSerializer
+	lookup_field = const.PRODUCT_ID_PROPERTY
 
 	def get(self, request, *args, **kwargs):
 		try:
@@ -56,4 +57,6 @@ class ProductDetailView(RetrieveAPIView):
 			return errorUtil.getInternalServerErrorResponse()
 
 	def get_queryset(self):
-		return Product.objects.filter(pk=self.kwargs[const.PK_PROPERTY])
+		return Product.objects.filter(
+			productId=self.kwargs[const.PRODUCT_ID_PROPERTY]
+		)
