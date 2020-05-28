@@ -1,4 +1,5 @@
 ID_PROPERTY = 'id'
+PK_PROPERTY = 'pk'
 PRODUCT_ID_PROPERTY = 'productId'
 TITLE_PROPERTY = 'title'
 DESCRIPTION_PROPERTY = 'description'
